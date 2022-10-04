@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {            
+            "type": "String"
+        },
+        "loganalyticsKey": {
+            "type": "String"
+        },
+        "loganalyticsId": {
+            "type": "String"
+        },
+        "demoAppName": {            
+            "type": "String"
+        },
+        "demoAppImage": {
+            "defaultValue": "mcr.microsoft.com/azuredocs/aci-helloworld",
+            "type": "String"
+        },
+        "demoAppRev": {            
+            "type": "String"
+        },
+        "demoAppTraffic": {            
+            "type": "int",
+            "defaultValue": 100
+        },
+        "location": {
+            "defaultValue": "northeurope",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.App/managedEnvironments",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('environment')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "appLogsConfiguration": {
+                    "destination": "log-analytics",
+                    "logAnalyticsConfiguration": {
+                        "customerId": "[parameters('loganalyticsId')]",
+                        "sharedKey": "[parameters('loganalyticsKey')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.App/containerApps",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('demoAppName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
+            ],
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
+                "configuration": {
+                    "activeRevisionsMode": "Multiple",
+                    "ingress": {
+                        "external": true,
+                        "targetPort": 80,
+                        "transport": "Auto",
+                        "traffic": [
+                            {
+                                "weight": "[parameters('demoAppTraffic')]",
+                                "latestRevision": true
+                            }
+                        ],
+                        "allowInsecure": false
+                    }
+                },
+                "template": {
+                    "revisionSuffix": "[parameters('demoAppRev')]",
+                    "containers": [
+                        {
+                            "image": "[parameters('demoAppImage')]",
+                            "name": "[parameters('demoAppName')]",
+                            "resources": {
+                                "cpu": 0.5,
+                                "memory": "1Gi"
+                            },
+                            "env": [
+                                {
+                                    "name": "backend_url",
+                                    "value": "example.internal.com"
+                                }
+                            ]
+                        }
+                    ],
+                    "scale": {
+                        "minReplicas": 0,
+                        "maxReplicas": 5
+                    }
+                }
+            }
+        }
+    ]
+}
