@@ -38,6 +38,9 @@ az acr login --name jramgar
 
 $frontEndImageName = "jramgar.azurecr.io/riojadotnet/frontend:v2"
 
+git checkout demo2
+git pull
+
 docker build -f .\src\frontend\Dockerfile .\src\frontend\. -t $frontEndImageName
 docker push $frontEndImageName
 #docker run -d -p 8080:80 --name frontend jramgar.azurecr.io/riojadotnet/frontend:v1
