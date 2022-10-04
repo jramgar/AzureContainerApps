@@ -1,0 +1,31 @@
+﻿@page
+@using Frontend.Models
+@inject IHttpContextAccessor httpContextaccessor
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome v1</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <p>Cookie:
+@*    @Html.Raw(httpContextaccessor.HttpContext.Request.Cookies["Bearer"])
+    @{
+        foreach (var cookie in httpContextaccessor.HttpContext.Request.Cookies)
+        {
+            @cookie.Key  @cookie.Value
+        }
+    }*@
+    </p>
+    <p>
+        Weather:
+        <ul>
+@*            @foreach (var item in (IEnumerable<WeatherForecast>)ViewData["weatherForecast"])
+            {
+                <li>@Html.DisplayFor(modelItem => item.Date) - @Html.DisplayFor(modelItem => item.Summary)</li>
+            }*@
+        </ul>
+    </p>
+</div>
