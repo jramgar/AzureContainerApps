@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 # Personal Files
-login.ps1
+prepare.ps1

@@ -8,3 +8,5 @@ az extension add --name containerapp --upgrade
 az provider register --namespace Microsoft.App
 az provider register --namespace Microsoft.OperationalInsights
 
+$acr_password="HUAYrAX5UbLwAn6p=eHRNWmQ48wswY8m"
+$acr_username="jramgar"
