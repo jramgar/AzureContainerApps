@@ -30,11 +30,7 @@
         "backendAppRev": {            
             "type": "String",
             "defaultValue": "rev-01"
-        },        
-        "demoAppTraffic": {            
-            "type": "int",
-            "defaultValue": 100
-        },
+        },                
         "location": {
             "defaultValue": "northeurope",
             "type": "String"
@@ -85,7 +81,7 @@
                         "transport": "Auto",
                         "traffic": [
                             {
-                                "weight": "[parameters('demoAppTraffic')]",
+                                "weight": 100,
                                 "latestRevision": true
                             }
                         ],

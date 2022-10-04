@@ -22,11 +22,11 @@ $logAnalyticsKey = az monitor log-analytics workspace get-shared-keys `
 # git checkout demo3
 # git pull
 
-# docker build -f .\src\frontend\Dockerfile .\src\frontend\. -t $frontendImageName
-# docker push $frontendImageName
+docker build -f .\src\frontend\Dockerfile .\src\frontend\. -t $frontendImageName
+docker push $frontendImageName
 
-# docker build -f .\src\backend\Dockerfile .\src\backend\. -t $backendImageName
-# docker push $backendImageName
+docker build -f .\src\backend\Dockerfile .\src\backend\. -t $backendImageName
+docker push $backendImageName
 
 #docker run -d -p 8080:80 --name frontend jramgar.azurecr.io/riojadotnet/frontend:v1
 
@@ -44,5 +44,4 @@ az deployment group create --resource-group $resourceGroup `
                                         backendAppRev='rev02' `
                                         acr_username=$acr_userName `
                                         acr_password=$acr_password
-
-                                        
+                                                                               
