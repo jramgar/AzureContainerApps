@@ -1,0 +1,126 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "type": "String"
+        },
+        "loganalyticsKey": {
+            "type": "String"
+        },
+        "loganalyticsId": {
+            "type": "String"
+        },
+        "backgroundAppName": {
+            "type": "String"
+        },
+        "backgroundAppImage": {
+            "type": "String"
+        },
+        "backgroundAppRev": {
+            "type": "String"
+        },
+        "storageConnectionString": {
+            "type": "securestring"
+        },
+        "location": {
+            "defaultValue": "northeurope",
+            "type": "String"
+        },
+        "acr_username": {
+            "defaultValue": "jramgar",
+            "type": "string"
+        },
+        "acr_password": {
+            "type": "secureString"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.App/managedEnvironments",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('environment')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "appLogsConfiguration": {
+                    "destination": "log-analytics",
+                    "logAnalyticsConfiguration": {
+                        "customerId": "[parameters('loganalyticsId')]",
+                        "sharedKey": "[parameters('loganalyticsKey')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.App/containerApps",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('backgroundAppName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
+            ],
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
+                "configuration": {
+                    "activeRevisionsMode": "Single",
+                    "secrets": [
+                        {
+                            "name": "myregistrypassword",
+                            "value": "[parameters('acr_password')]"
+                        }
+                    ],
+                    "registries": [
+                        {
+                            "server": "jramgar.azurecr.io",
+                            "username": "[parameters('acr_username')]",
+                            "passwordSecretRef": "myregistrypassword"
+                        }
+                    ]
+                },
+                "template": {
+                    "revisionSuffix": "[parameters('backgroundAppRev')]",
+                    "containers": [
+                        {
+                            "image": "[parameters('backgroundAppImage')]",
+                            "name": "[parameters('backgroundAppName')]",
+                            "resources": {
+                                "cpu": 0.5,
+                                "memory": "1Gi"
+                            },
+                            "env": [
+                                {
+                                    "name": "AzureWebJobsQUEUE_CONNECTIONSTRING",
+                                    "value": "[parameters('storageConnectionString')]"
+                                }
+                            ]
+                        }
+                    ],
+                    "scale": {
+                        "minReplicas": 0,
+                        "maxReplicas": 5,
+                        "rules": [
+                            {
+                                "name": "azure-queue",
+                                "custom": {
+                                    "type": "azure-queue",
+                                    "metadata": {
+                                        "queueName": "myServiceBusQueue",
+                                        "queueLength": 5,
+                                        "activationQueueLength": 10,
+                                        "connectionFromEnv": "STORAGE_CONNECTINSTRING",
+                                        "accountName": "",
+                                        "cloud": "AzurePublicCloud"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

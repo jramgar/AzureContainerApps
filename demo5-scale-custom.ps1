@@ -1,5 +1,40 @@
+$resourceGroup = "RiojaDotNet2022"
+$logWorkspace = "aca-demo-workspace"
+$location = "northeurope"
 $storageAccount="jramgar"
 $queue="riojadotnet-queue"
+$fnBackgroundImageName = "jramgar.azurecr.io/riojadotnet/fnbackground:v1"
+
+az acr login --name jramgar
+docker build -f .\src\FnBackground\Dockerfile .\src\FnBackground\. -t $fnBackgroundImageName
+docker push $fnBackgroundImageName
+
+
+# retrieve workspace ID and secret
+$logAnalyticsId = az monitor log-analytics workspace show --query customerId `
+                                        --resource-group $resourceGroup `
+                                        --workspace-name $logWorkspace `
+                                        --output tsv 
+
+$logAnalyticsKey = az monitor log-analytics workspace get-shared-keys `
+                                        --query primarySharedKey  `
+                                        --resource-group $resourceGroup `
+                                        --workspace-name $logWorkspace `
+                                        --output tsv 
+
+# https://keda.sh/docs/2.8/scalers/azure-storage-queue/
+
+az deployment group create --resource-group $resourceGroup `
+                                        --template-file 'demo5-template.json' `
+                                        --parameters loganalyticsKey=$logAnalyticsKey `
+                                                     loganalyticsId=$logAnalyticsId `
+                                                     environment="aca-demo1" `
+                                                     backgroundAppRev='rev02' `
+                                                     backgroundAppName='background-app' `
+                                                     backgroundAppImage=$fnBackgroundImageName `
+                                                     storageConnectionString=$storageConnectionString `
+                                                     acr_username=$acr_userName `
+                                                     acr_password=$acr_password
 
 
 $message = "event payload..."

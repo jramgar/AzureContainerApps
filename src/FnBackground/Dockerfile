@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["FnBackground/FnBackground.csproj", "FnBackground/"]
-RUN dotnet restore "FnBackground/FnBackground.csproj"
+COPY ["FnBackground.csproj", "."]
+RUN dotnet restore "FnBackground.csproj"
 COPY . .
-WORKDIR "/src/FnBackground"
+WORKDIR "/src/"
 RUN dotnet build "FnBackground.csproj" -c Release -o /app/build
 
 FROM build AS publish
