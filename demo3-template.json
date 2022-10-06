@@ -112,11 +112,7 @@
                                 "memory": "1Gi"
                             }
                         }
-                    ],
-                    "scale": {
-                        "minReplicas": 0,
-                        "maxReplicas": 5
-                    }
+                    ]
                 }
             }
         },
@@ -173,16 +169,12 @@
                             },
                             "env": [
                                 {
-                                    "name": "backend_url",
+                                    "name": "Backend__BaseUrl",
                                     "value": "[concat('http://',reference(resourceId('Microsoft.App/containerApps', parameters('backendAppName')),'2022-03-01','full').properties.configuration.ingress.fqdn)]"
                                 }
                             ]
                         }
-                    ],
-                    "scale": {
-                        "minReplicas": 0,
-                        "maxReplicas": 5
-                    }
+                    ]
                 }
             }
         }

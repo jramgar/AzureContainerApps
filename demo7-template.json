@@ -1,203 +1,203 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "environment": {
-            "type": "String"
-        },
-        "loganalyticsKey": {
-            "type": "String"
-        },
-        "loganalyticsId": {
-            "type": "String"
-        },
-        "frontendAppName": {
-            "type": "String"
-        },
-        "frontendAppImage": {
-            "type": "String"
-        },
-        "frontendAppRev": {
-            "type": "String",
-            "defaultValue": "rev-01"
-        },
-        "backendAppName": {
-            "type": "String"
-        },
-        "backendAppImage": {
-            "type": "String"
-        },
-        "backendAppRev": {
-            "type": "String",
-            "defaultValue": "rev-01"
-        },
-        "location": {
-            "defaultValue": "northeurope",
-            "type": "String"
-        },
-        "acr_username": {
-            "defaultValue": "jramgar",
-            "type": "string"
-        },
-        "acr_password": {
-            "type": "secureString"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "type": "String"
     },
-    "variables": {},
-    "resources": [
-        {
-            "type": "Microsoft.App/managedEnvironments",
-            "apiVersion": "2022-03-01",
-            "name": "[parameters('environment')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "appLogsConfiguration": {
-                    "destination": "log-analytics",
-                    "logAnalyticsConfiguration": {
-                        "customerId": "[parameters('loganalyticsId')]",
-                        "sharedKey": "[parameters('loganalyticsKey')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.App/containerApps",
-            "apiVersion": "2022-03-01",
-            "name": "[parameters('backendAppName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
-            ],
-            "identity": {
-                "type": "None"
-            },
-            "properties": {
-                "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
-                "configuration": {
-                    "activeRevisionsMode": "Multiple",
-                    "ingress": {
-                        "external": false,
-                        "targetPort": 80,
-                        "transport": "Auto",
-                        "traffic": [
-                            {
-                                "weight": 100,
-                                "latestRevision": true
-                            }
-                        ],
-                        "allowInsecure": false
-                    },
-                    "secrets": [
-                        {
-                            "name": "myregistrypassword",
-                            "value": "[parameters('acr_password')]"
-                        }
-                    ],
-                    "registries": [
-                        {
-                            "server": "jramgar.azurecr.io",
-                            "username": "[parameters('acr_username')]",
-                            "passwordSecretRef": "myregistrypassword"
-                        }
-                    ]
-                },
-                "template": {
-                    "revisionSuffix": "[parameters('backendAppRev')]",
-                    "containers": [
-                        {
-                            "image": "[parameters('backendAppImage')]",
-                            "name": "[parameters('backendAppName')]",
-                            "resources": {
-                                "cpu": 0.5,
-                                "memory": "1Gi"
-                            },
-                            "volumeMounts": [
-                                {
-                                    "mountPath": "/ficheros",
-                                    "volumeName": "azure-files-volume"                                    
-                                }
-                            ]
-                        }
-                    ],
-                    "scale": {
-                        "minReplicas": 0,
-                        "maxReplicas": 5
-                    },
-                    "volumes": [
-                        {
-                            "name": "azure-files-volume",
-                            "storageType": "AzureFile",
-                            "storageName": "mystorage"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.App/containerApps",
-            "apiVersion": "2022-03-01",
-            "name": "[parameters('frontendAppName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
-            ],
-            "identity": {
-                "type": "None"
-            },
-            "properties": {
-                "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
-                "configuration": {
-                    "activeRevisionsMode": "Multiple",
-                    "ingress": {
-                        "external": true,
-                        "targetPort": 80,
-                        "transport": "Auto",
-                        "traffic": [
-                            {
-                                "weight": 100,
-                                "latestRevision": true
-                            }
-                        ],
-                        "allowInsecure": false
-                    },
-                    "secrets": [
-                        {
-                            "name": "myregistrypassword",
-                            "value": "[parameters('acr_password')]"
-                        }
-                    ],
-                    "registries": [
-                        {
-                            "server": "jramgar.azurecr.io",
-                            "username": "[parameters('acr_username')]",
-                            "passwordSecretRef": "myregistrypassword"
-                        }
-                    ]
-                },
-                "template": {
-                    "revisionSuffix": "[parameters('frontendAppRev')]",
-                    "containers": [
-                        {
-                            "image": "[parameters('frontendAppImage')]",
-                            "name": "[parameters('frontendAppName')]",
-                            "resources": {
-                                "cpu": 0.5,
-                                "memory": "1Gi"
-                            },
-                            "env": [
-                                {
-                                    "name": "backend_url",
-                                    "value": "[concat('http://',reference(resourceId('Microsoft.App/containerApps', parameters('backendAppName')),'2022-03-01','full').properties.configuration.ingress.fqdn)]"
-                                }
-                            ]
-                        }
-                    ],
-                    "scale": {
-                        "minReplicas": 0,
-                        "maxReplicas": 5
-                    }
-                }
-            }
+    "loganalyticsKey": {
+      "type": "String"
+    },
+    "loganalyticsId": {
+      "type": "String"
+    },
+    "frontendAppName": {
+      "type": "String"
+    },
+    "frontendAppImage": {
+      "type": "String"
+    },
+    "frontendAppRev": {
+      "type": "String",
+      "defaultValue": "rev-01"
+    },
+    "backendAppName": {
+      "type": "String"
+    },
+    "backendAppImage": {
+      "type": "String"
+    },
+    "backendAppRev": {
+      "type": "String",
+      "defaultValue": "rev-01"
+    },
+    "location": {
+      "defaultValue": "northeurope",
+      "type": "String"
+    },
+    "acr_username": {
+      "defaultValue": "jramgar",
+      "type": "string"
+    },
+    "acr_password": {
+      "type": "secureString"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.App/managedEnvironments",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('environment')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "appLogsConfiguration": {
+          "destination": "log-analytics",
+          "logAnalyticsConfiguration": {
+            "customerId": "[parameters('loganalyticsId')]",
+            "sharedKey": "[parameters('loganalyticsKey')]"
+          }
         }
-    ]
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('backendAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
+      ],
+      "identity": {
+        "type": "None"
+      },
+      "properties": {
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
+        "configuration": {
+          "activeRevisionsMode": "Multiple",
+          "ingress": {
+            "external": false,
+            "targetPort": 80,
+            "transport": "Auto",
+            "traffic": [
+              {
+                "weight": 100,
+                "latestRevision": true
+              }
+            ],
+            "allowInsecure": false
+          },
+          "secrets": [
+            {
+              "name": "myregistrypassword",
+              "value": "[parameters('acr_password')]"
+            }
+          ],
+          "registries": [
+            {
+              "server": "jramgar.azurecr.io",
+              "username": "[parameters('acr_username')]",
+              "passwordSecretRef": "myregistrypassword"
+            }
+          ]
+        },
+        "template": {
+          "revisionSuffix": "[parameters('backendAppRev')]",
+          "containers": [
+            {
+              "image": "[parameters('backendAppImage')]",
+              "name": "[parameters('backendAppName')]",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1Gi"
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/ficheros",
+                  "volumeName": "azure-files-volume"
+                }
+              ]
+            }
+          ],
+          "scale": {
+            "minReplicas": 0,
+            "maxReplicas": 5
+          },
+          "volumes": [
+            {
+              "name": "azure-files-volume",
+              "storageType": "AzureFile",
+              "storageName": "mystorage"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('frontendAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]"
+      ],
+      "identity": {
+        "type": "None"
+      },
+      "properties": {
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments', parameters('environment'))]",
+        "configuration": {
+          "activeRevisionsMode": "Multiple",
+          "ingress": {
+            "external": true,
+            "targetPort": 80,
+            "transport": "Auto",
+            "traffic": [
+              {
+                "weight": 100,
+                "latestRevision": true
+              }
+            ],
+            "allowInsecure": false
+          },
+          "secrets": [
+            {
+              "name": "myregistrypassword",
+              "value": "[parameters('acr_password')]"
+            }
+          ],
+          "registries": [
+            {
+              "server": "jramgar.azurecr.io",
+              "username": "[parameters('acr_username')]",
+              "passwordSecretRef": "myregistrypassword"
+            }
+          ]
+        },
+        "template": {
+          "revisionSuffix": "[parameters('frontendAppRev')]",
+          "containers": [
+            {
+              "image": "[parameters('frontendAppImage')]",
+              "name": "[parameters('frontendAppName')]",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1Gi"
+              },
+              "env": [
+                {
+                  "name": "Backend__BaseUrl",
+                  "value": "[concat('http://',reference(resourceId('Microsoft.App/containerApps', parameters('backendAppName')),'2022-03-01','full').properties.configuration.ingress.fqdn)]"
+                }
+              ]
+            }
+          ],
+          "scale": {
+            "minReplicas": 0,
+            "maxReplicas": 5
+          }
+        }
+      }
+    }
+  ]
 }
