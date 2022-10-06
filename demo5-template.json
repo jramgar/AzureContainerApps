@@ -3,36 +3,39 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environment": {
-            "type": "String"
+            "type": "string"
         },
         "loganalyticsKey": {
-            "type": "String"
+            "type": "string"
         },
         "loganalyticsId": {
-            "type": "String"
+            "type": "string"
         },
         "backgroundAppName": {
-            "type": "String"
+            "type": "string"
         },
         "backgroundAppImage": {
-            "type": "String"
+            "type": "string"
         },
         "backgroundAppRev": {
-            "type": "String"
-        },
+            "type": "string"
+        },        
         "storageConnectionString": {
             "type": "securestring"
         },
+        "queueName": {
+            "type": "string"
+        },
         "location": {
             "defaultValue": "northeurope",
-            "type": "String"
+            "type": "string"
         },
         "acr_username": {
             "defaultValue": "jramgar",
             "type": "string"
         },
         "acr_password": {
-            "type": "secureString"
+            "type": "securestring"
         }
     },
     "variables": {},
@@ -71,6 +74,10 @@
                         {
                             "name": "myregistrypassword",
                             "value": "[parameters('acr_password')]"
+                        },
+                        {
+                            "name": "mystorageconnection",
+                            "value": "[parameters('storageConnectionString')]"
                         }
                     ],
                     "registries": [
@@ -104,17 +111,17 @@
                         "maxReplicas": 5,
                         "rules": [
                             {
-                                "name": "azure-queue",
+                                "name": "queue-trigger",
                                 "custom": {
                                     "type": "azure-queue",
-                                    "metadata": {
-                                        "queueName": "myServiceBusQueue",
-                                        "queueLength": 5,
-                                        "activationQueueLength": 10,
-                                        "connectionFromEnv": "STORAGE_CONNECTINSTRING",
-                                        "accountName": "",
-                                        "cloud": "AzurePublicCloud"
-                                    }
+                                    "metadata": {                                        
+                                        "queueName": "[parameters('queueName')]",
+                                        "queueLength": "5"                                        
+                                    },
+                                    "auth": [{
+                                      "secretRef": "mystorageconnection",
+                                      "triggerParameter": "connection"
+                                    }]
                                 }
                             }
                         ]

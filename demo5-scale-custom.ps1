@@ -1,6 +1,6 @@
 $resourceGroup = "RiojaDotNet2022"
+$environment = "aca-demo1"
 $logWorkspace = "aca-demo-workspace"
-$location = "northeurope"
 $storageAccount="jramgar"
 $queue="riojadotnet-queue"
 $fnBackgroundImageName = "jramgar.azurecr.io/riojadotnet/fnbackground:v1"
@@ -28,10 +28,11 @@ az deployment group create --resource-group $resourceGroup `
                                         --template-file 'demo5-template.json' `
                                         --parameters loganalyticsKey=$logAnalyticsKey `
                                                      loganalyticsId=$logAnalyticsId `
-                                                     environment="aca-demo1" `
+                                                     environment=$environment `
                                                      backgroundAppRev='rev02' `
                                                      backgroundAppName='background-app' `
                                                      backgroundAppImage=$fnBackgroundImageName `
+                                                     queueName=$queue `
                                                      storageConnectionString=$storageConnectionString `
                                                      acr_username=$acr_userName `
                                                      acr_password=$acr_password
@@ -41,7 +42,7 @@ $message = "event payload..."
 $bytes = [System.Text.Encoding]::Unicode.GetBytes($message)
 $encodedMessage = [Convert]::ToBase64String($bytes)
 
-1..20 | ForEach-Object -Parallel {
+1..200 | ForEach-Object -Parallel {
     Write-Host "Send message..."
 
     $storageConnectionString  = $($using:storageConnectionString)

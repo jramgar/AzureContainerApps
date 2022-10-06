@@ -1,0 +1,18 @@
+﻿@page
+@using Frontend.Models
+@model Frontend.Pages.HomeModel
+@{
+    ViewData["Title"] = "Files page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Files in Volume</h1>
+    <p>        
+        <ul>
+            @foreach (var file in (IEnumerable<FileItem>)ViewData["files"])
+            {             
+                 <li> <div style="text-align:left"> @Html.DisplayFor(modelItem => file.Name) [@Html.DisplayFor(modelItem => file.Size) Kb]</div></li>
+            }
+        </ul>
+    </p>
+</div>

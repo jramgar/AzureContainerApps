@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend", "Backend\Backend.csproj", "{02D0EBC7-B9ED-47CF-A7F5-9EA05DC6DB69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FnBackground", "FnBackground\FnBackground.csproj", "{8B037521-D023-41ED-A99B-7FE9F04E5B2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FnBackground", "FnBackground\FnBackground.csproj", "{8B037521-D023-41ED-A99B-7FE9F04E5B2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
