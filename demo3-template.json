@@ -3,44 +3,44 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environment": {            
-            "type": "String"
+            "type": "string"
         },
         "loganalyticsKey": {
-            "type": "String"
+            "type": "string"
         },
         "loganalyticsId": {
-            "type": "String"
+            "type": "string"
         },
         "frontendAppName": {            
-            "type": "String"
+            "type": "string"
         },
         "frontendAppImage": {            
-            "type": "String"
+            "type": "string"
         },
         "frontendAppRev": {
-            "type": "String",
+            "type": "string",
             "defaultValue": "rev-01"
         },
         "backendAppName": {            
-            "type": "String"
+            "type": "string"
         },
         "backendAppImage": {            
-            "type": "String"
+            "type": "string"
         },
         "backendAppRev": {            
-            "type": "String",
+            "type": "string",
             "defaultValue": "rev-01"
         },                
         "location": {
             "defaultValue": "northeurope",
-            "type": "String"
+            "type": "string"
         },
         "acr_username": {
 			"defaultValue": "jramgar",
 			"type": "string"
 		},
         "acr_password": {
-			"type": "secureString"
+			"type": "securestring"
 		}
     },
     "variables": {},
@@ -78,7 +78,7 @@
                     "ingress": {
                         "external": false,
                         "targetPort": 80,
-                        "transport": "Auto",
+                        "transport": "auto",
                         "traffic": [
                             {
                                 "weight": 100,
@@ -134,7 +134,7 @@
                     "ingress": {
                         "external": true,
                         "targetPort": 80,
-                        "transport": "Auto",
+                        "transport": "auto",
                         "traffic": [
                             {
                                 "weight": 100,

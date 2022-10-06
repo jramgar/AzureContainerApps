@@ -1,5 +1,6 @@
 ﻿@page
 @using Frontend.Models
+@using System.Text
 @model Frontend.Pages.HomeModel
 @{
     ViewData["Title"] = "Files page";
@@ -7,12 +8,83 @@
 
 <div class="text-center">
     <h1 class="display-4">Files in Volume</h1>
-    <p>        
-        <ul>
-            @foreach (var file in (IEnumerable<FileItem>)ViewData["files"])
-            {             
-                 <li> <div style="text-align:left"> @Html.DisplayFor(modelItem => file.Name) [@Html.DisplayFor(modelItem => file.Size) Kb]</div></li>
-            }
-        </ul>
-    </p>
+
+    @{
+        var dirs = ViewData["root"] as IEnumerable<string>;
+        if (dirs is not null && dirs.Any())
+        {
+            <h5>Directories</h5>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>
+                        Directory
+                    </th>                    
+                </tr>
+                @foreach (var dir in dirs)
+                {
+                    <tr>
+                        <td>
+                            @dir
+                        </td>                        
+                    </tr>
+                }
+            </table>
+        }
+
+
+        var files = ViewData["files"] as IEnumerable<FileItem>;
+        if (files is not null && files.Any())
+        {
+            <h5>Files</h5>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>
+                        File
+                    </th>
+                    <th>
+                        Size
+                    </th>
+                </tr>
+                @foreach (var file in files)
+                {
+                    <tr>
+                        <td>
+                            @file.Name
+                        </td>
+                        <td>
+                            @file.Size
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    }
+
+
+    @{
+        var logs = ViewData["mylog"] as IEnumerable<string>;
+        if (logs is not null && logs.Any())
+        {
+            <h5>Logs</h5>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>
+                        Message
+                    </th>                    
+                </tr>
+                @foreach (var log in logs)
+                {
+                    <tr>
+                        <td>
+                            @log
+                        </td>                        
+                    </tr>
+                }
+            </table>
+        }
+    }
+
 </div>
+
+
+

@@ -18,7 +18,7 @@ $url = az containerapp show --name $frontendAppName `
 artillery quick --count 500 --num 100 https://$url
 
 
-echo 'Tested fqdn: '$url
+Write-Host 'Tested fqdn: '$url
 az containerapp show --name $frontendAppName `
     --resource-group $resourceGroup `
     --query properties.latestRevisionName

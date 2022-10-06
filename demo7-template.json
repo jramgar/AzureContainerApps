@@ -113,7 +113,7 @@
               },
               "volumeMounts": [
                 {
-                  "mountPath": "/ficheros",
+                  "mountPath": "/app/ficheros",
                   "volumeName": "azure-files-volume"
                 }
               ]

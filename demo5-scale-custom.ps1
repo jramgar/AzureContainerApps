@@ -29,7 +29,7 @@ az deployment group create --resource-group $resourceGroup `
                                         --parameters loganalyticsKey=$logAnalyticsKey `
                                                      loganalyticsId=$logAnalyticsId `
                                                      environment=$environment `
-                                                     backgroundAppRev='rev02' `
+                                                     backgroundAppRev='rev01' `
                                                      backgroundAppName='background-app' `
                                                      backgroundAppImage=$fnBackgroundImageName `
                                                      queueName=$queue `

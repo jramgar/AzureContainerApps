@@ -9,12 +9,41 @@
 <div class="text-center">
     <h1 class="display-4">Welcome v2</h1>
 
+    @{
+        var headers = Request?.Headers.ToList();
+        if (headers is not null && headers.Any())
+        {
+            <h5>Headers</h5>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>
+                        Header
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                </tr>
+                @foreach (var header in headers)
+                {
+                    <tr>
+                        <td>
+                            @header.Key
+                        </td>
+                        <td>
+                            @header.Value.ToString()
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    }
 
-    <h5>Claims</h5>
+
     @{
         var claims = ViewData["Claims"] as IEnumerable<Claim>;
         if (claims is not null && claims.Any())
         {
+            <h5>Claims</h5>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>
@@ -39,17 +68,13 @@
                 }
             </table>
         }
-        else
-        {
-            <p>No claims</p>
-        }
     }
 
-    <h5>Weather forecast</h5>
     @{
         var weatherForecasts = ViewData["weatherForecast"] as IEnumerable<WeatherForecast>;
         if (weatherForecasts is not null && weatherForecasts.Any())
         {
+            <h5>Weather forecast</h5>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>
@@ -74,10 +99,9 @@
                 }
             </table>
         }
-        else
-        {
-            <p>No forecasts</p>
-        }
     }
 
 </div>
+
+
+

@@ -26,9 +26,9 @@ az deployment group create --resource-group $resourceGroup `
                          environment="aca-demo1" `
                          frontendAppName='frontend-app' `
                          frontendAppImage=$frontendImageName `
-                         frontendAppRev='rev07c' `
+                         frontendAppRev='rev03-3' `
                          backendAppName='backend-app' `
                          backendAppImage=$backendImageName `
-                         backendAppRev='rev07c' `
+                         backendAppRev='rev03-3' `
                          acr_username=$acr_userName `
                          acr_password=$acr_password
