@@ -1,6 +1,6 @@
 $resourceGroup = "RiojaDotNet-vnet"
 $logWorkspace = "aca-demo-workspace"
-$environment = "aca-demo1"
+$environment = "aca-demo"
 $nginxDemoAppName = "demoapp"
 $nginxDemoAppImage = "mcr.microsoft.com/azuredocs/aca-helloworld"
 $location = "northeurope"

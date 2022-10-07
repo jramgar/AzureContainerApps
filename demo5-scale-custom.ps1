@@ -1,5 +1,5 @@
 $resourceGroup = "RiojaDotNet2022"
-$environment = "aca-demo1"
+$environment = "aca-demo"
 $logWorkspace = "aca-demo-workspace"
 $storageAccount="jramgar"
 $queue="riojadotnet-queue"
@@ -29,7 +29,7 @@ az deployment group create --resource-group $resourceGroup `
                                         --parameters loganalyticsKey=$logAnalyticsKey `
                                                      loganalyticsId=$logAnalyticsId `
                                                      environment=$environment `
-                                                     backgroundAppRev='rev02' `
+                                                     backgroundAppRev='rev01' `
                                                      backgroundAppName='background-app' `
                                                      backgroundAppImage=$fnBackgroundImageName `
                                                      queueName=$queue `

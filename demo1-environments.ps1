@@ -1,6 +1,6 @@
 $resourceGroup = "RiojaDotNet2022"
 $logWorkspace = "aca-demo-workspace"
-$environment = "aca-demo1"
+$environment = "aca-demo"
 $location = "northeurope"
 
 #create the resource group

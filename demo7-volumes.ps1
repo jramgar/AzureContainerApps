@@ -1,5 +1,5 @@
 $resourceGroup = "RiojaDotNet2022"
-$environment = "aca-demo1"
+$environment = "aca-demo"
 $storageAccountName = "jramgar"
 $storageFileShare = "ficheros-demo"
 $frontendImageName = "jramgar.azurecr.io/riojadotnet/frontend:v2"
@@ -23,12 +23,12 @@ az deployment group create --resource-group $resourceGroup `
             --template-file 'demo7-template.json' `
             --parameters loganalyticsKey=$logAnalyticsKey `
                          loganalyticsId=$logAnalyticsId `
-                         environment="aca-demo1" `
+                         environment="aca-demo" `
                          frontendAppName='frontend-app' `
                          frontendAppImage=$frontendImageName `
-                         frontendAppRev='rev07c' `
+                         frontendAppRev='rev03-5' `
                          backendAppName='backend-app' `
                          backendAppImage=$backendImageName `
-                         backendAppRev='rev07c' `
+                         backendAppRev='rev03-5' `
                          acr_username=$acr_userName `
                          acr_password=$acr_password

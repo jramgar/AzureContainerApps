@@ -22,7 +22,8 @@ namespace Frontend.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             ViewData["weatherForecast"] = await GetWeatherForecasts();
-            ViewData["Claims"] = GetClaims();
+            ViewData["Claims"] = GetClaims();            
+
             return Page();
         }
 
@@ -37,5 +38,7 @@ namespace Frontend.Pages
             var user = HttpContext.User;
             return user.Claims;
         }
+
+    
     }
 }
