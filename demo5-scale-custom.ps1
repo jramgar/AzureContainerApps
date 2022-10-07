@@ -5,9 +5,9 @@ $storageAccount="jramgar"
 $queue="riojadotnet-queue"
 $fnBackgroundImageName = "jramgar.azurecr.io/riojadotnet/fnbackground:v1"
 
-az acr login --name jramgar
-docker build -f .\src\FnBackground\Dockerfile .\src\FnBackground\. -t $fnBackgroundImageName
-docker push $fnBackgroundImageName
+# az acr login --name jramgar
+# docker build -f .\src\FnBackground\Dockerfile .\src\FnBackground\. -t $fnBackgroundImageName
+# docker push $fnBackgroundImageName
 
 
 # retrieve workspace ID and secret

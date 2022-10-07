@@ -111,7 +111,7 @@
                         "maxReplicas": 5,
                         "rules": [
                             {
-                                "name": "queue-trigger",
+                                "name": "my-queue-trigger",
                                 "custom": {
                                     "type": "azure-queue",
                                     "metadata": {                                        
