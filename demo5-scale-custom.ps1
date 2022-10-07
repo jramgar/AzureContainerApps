@@ -1,5 +1,5 @@
 $resourceGroup = "RiojaDotNet2022"
-$environment = "aca-demo1"
+$environment = "aca-demo"
 $logWorkspace = "aca-demo-workspace"
 $storageAccount="jramgar"
 $queue="riojadotnet-queue"

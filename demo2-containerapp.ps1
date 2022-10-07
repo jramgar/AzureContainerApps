@@ -35,7 +35,7 @@ az deployment group create --resource-group $resourceGroup `
     --template-file 'demo2-template.json' `
     --parameters loganalyticsKey=$logAnalyticsKey `
     loganalyticsId=$logAnalyticsId `
-    environment="aca-demo1" `
+    environment="aca-demo" `
     demoAppRev='rev01' `
     demoAppName='frontend-app' `
     demoAppImage=$frontEndImageName `

@@ -78,7 +78,7 @@
           "ingress": {
             "external": false,
             "targetPort": 80,
-            "transport": "Auto",
+            "transport": "auto",
             "traffic": [
               {
                 "weight": 100,
@@ -110,26 +110,13 @@
               "resources": {
                 "cpu": 0.5,
                 "memory": "1Gi"
-              },
-              "volumeMounts": [
-                {
-                  "mountPath": "/app/ficheros",
-                  "volumeName": "azure-files-volume"
-                }
-              ]
+              }
             }
           ],
           "scale": {
             "minReplicas": 0,
             "maxReplicas": 5
-          },
-          "volumes": [
-            {
-              "name": "azure-files-volume",
-              "storageType": "AzureFile",
-              "storageName": "mystorage"
-            }
-          ]
+          }
         }
       }
     },
@@ -189,13 +176,26 @@
                   "name": "Backend__BaseUrl",
                   "value": "[concat('http://',reference(resourceId('Microsoft.App/containerApps', parameters('backendAppName')),'2022-03-01','full').properties.configuration.ingress.fqdn)]"
                 }
+              ],
+              "volumeMounts": [
+                {
+                  "mountPath": "/app/ficheros",
+                  "volumeName": "azure-files-volume"
+                }
               ]
             }
           ],
           "scale": {
             "minReplicas": 0,
             "maxReplicas": 5
-          }
+          },
+          "volumes": [
+            {
+              "name": "azure-files-volume",
+              "storageType": "AzureFile",
+              "storageName": "mystorage"
+            }
+          ]
         }
       }
     }

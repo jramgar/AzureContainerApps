@@ -112,7 +112,11 @@
                                 "memory": "1Gi"
                             }
                         }
-                    ]
+                    ],
+                    "scale": {
+                        "minReplicas": 0,
+                        "maxReplicas": 5
+                    }
                 }
             }
         },
@@ -174,7 +178,11 @@
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "scale": {
+                        "minReplicas": 0,
+                        "maxReplicas": 5
+                    }
                 }
             }
         }
